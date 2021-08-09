@@ -40,6 +40,11 @@ def sync_time():
     print(f'Synced Time: {datetime.now()}')
 
 
+def local_now():
+    """returns the current local time"""
+    return datetime.now()
+
+
 def utc_now():
     """returns the UTC time"""
     return (datetime.now() - timedelta(seconds=time_utils._utc_offset_seconds))

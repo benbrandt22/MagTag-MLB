@@ -10,7 +10,7 @@ from adafruit_display_shapes.triangle import Triangle
 from adafruit_display_shapes.circle import Circle
 from adafruit_bitmap_font import bitmap_font
 from mlb.models.game_basic import GameBasic
-from time_utils import utc_to_local, month_name, hour_12, ampm, relative_day, day_of_week
+from time_utils import utc_to_local, month_name, hour_12, ampm, relative_day, day_of_week, local_now
 
 class ScoreboardView:
 
@@ -95,12 +95,15 @@ class ScoreboardView:
         top_bar = Rect(0, 0, 296, header_height, fill=header_bg)
         header_group.append(top_bar)
 
-        gametime_local = utc_to_local(self.model.dateTimeUtc)
+        # Default to showing the game start time
+        header_time = utc_to_local(self.model.dateTimeUtc)
+        if(self.model.status == "Live"):
+            header_time = local_now()
 
-        day_text = ( relative_day(gametime_local) or day_of_week(gametime_local) )
-        time_text = f'{day_text}, {month_name(gametime_local)} {gametime_local.day} / {hour_12(gametime_local)}:{gametime_local.minute:02d} {ampm(gametime_local)}'
+        day_text = ( relative_day(header_time) or day_of_week(header_time) )
+        header_text = f'{day_text}, {month_name(header_time)} {header_time.day} / {hour_12(header_time)}:{header_time.minute:02d} {ampm(header_time)}'
 
-        time_label = label.Label(terminalio.FONT, text=time_text, color=0xFFFFFF, background_color=header_bg)
+        time_label = label.Label(terminalio.FONT, text=header_text, color=0xFFFFFF, background_color=header_bg)
         time_label.anchor_point = (0, 0.5)
         time_label.anchored_position = (3, int(header_height/2))
         header_group.append(time_label)
