@@ -9,13 +9,12 @@ import mlb.api as API
 import alarm
 from alarm_utils import time_alarm_sec
 from time_utils import utc_to_local, utc_now
+from secrets import secrets
 
 def start():
     print('MLB Project')
 
-    # TEAMS LIST: https://statsapi.mlb.com/api/v1/teams?sportIds=1&fields=teams,id,name
-    team_id = 142 # MN Twins
-
+    team_id = secrets['team_id']
 
     app_mode = AppMode.Schedule
     # is there a live game now?

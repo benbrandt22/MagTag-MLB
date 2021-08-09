@@ -14,17 +14,19 @@ The program will show the schedule and a live game scoreboard for one specific t
 
 ## Choose your Team
 
-The program requires a "Team ID" to define which team to follow. This is currently coded into the `mlb/main.py` file. The Team ID is the ID number used within the MLB Stats API. To find your team of choice, refer to the [full team list via the API](https://statsapi.mlb.com/api/v1/teams?sportIds=1&fields=teams,id,name).
+The program requires a "Team ID" to define which team to follow. This is defined as the `team_id` value in the `secrets.py` file (more info below). The Team ID is the ID number used within the MLB Stats API. To find your team of choice, refer to the [full team list via the API](https://statsapi.mlb.com/api/v1/teams?sportIds=1&fields=teams,id,name).
 
 ## Secrets file
 
-The programs requires a `secrets.py` file in the same (root level) folder as `code.py`. This file should contain your wifi SSID and password, as well as your time zone. This has been excluded from the git repository, so you'll need to create your own, here's an example:
+The programs requires a `secrets.py` file in the same (root level) folder as `code.py`. It basically acts as your config file for the app. This file should contain your wifi SSID and password, as well as your time zone, and your preferred team ID. This has been excluded from the git repository, so you'll need to create your own, here's an example:
 
 ```python
 secrets = {
     'ssid' : 'MyNetworkName',
     'password' : 'MyNetworkPassword',
-    'timezone' : 'America/Chicago' # http://worldtimeapi.org/timezones
+    'timezone' : 'America/Chicago', # http://worldtimeapi.org/timezones
+    # Team IDs: https://statsapi.mlb.com/api/v1/teams?sportIds=1&fields=teams,id,name
+    'team_id' : 142
 }
 ```
 
