@@ -71,8 +71,6 @@ def start():
         #----------------------------------------
         
 
-
-#TODO: Add light and deep sleep where appropriate
 #TODO: Indicate battery level somehow. Red light when low? Icon on screen?
 #TODO: Handle errors such as failed requests due to wifi/internet
 #TODO: app mode switching via buttons
