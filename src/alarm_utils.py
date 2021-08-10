@@ -5,4 +5,4 @@ import time
 
 
 def time_alarm_sec(seconds: int):
-    return alarm.time.TimeAlarm(monotonic_time=time.monotonic() + seconds)
+    return alarm.time.TimeAlarm(epoch_time=(time.time() + seconds))
