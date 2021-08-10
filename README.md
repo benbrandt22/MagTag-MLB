@@ -1,4 +1,4 @@
-# MagTagMLB
+# MagTag-MLB
 
 MLB Baseball Schedule and Scoreboard for the Adafruit MagTag
 
