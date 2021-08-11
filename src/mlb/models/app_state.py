@@ -5,4 +5,4 @@ class AppState:
     def __init__(self):
         self.appMode = AppMode.Schedule
         self.teamId = secrets['team_id']
-        self.liveGamePk = None
+        self.scoreboardGamePk = None
