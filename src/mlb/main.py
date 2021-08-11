@@ -19,9 +19,12 @@ def start():
     appState = AppState()
 
     appState.appMode = AppMode.Schedule
+    
     # Start up in Scoreboard mode if there's a live game now
-    appState.liveGamePk = API.get_live_gamePk(appState.teamId)
-    if appState.liveGamePk is not None:
+    scoreboardGame = API.get_scoreboard_gamePk_and_status(appState.teamId)
+    appState.scoreboardGamePk = scoreboardGame['gamePk']
+
+    if scoreboardGame['status'] == 'Live':
         appState.appMode = AppMode.ScoreBoard
 
     while True:
@@ -80,7 +83,7 @@ def start():
         
         if appState.appMode == AppMode.ScoreBoard:
 
-            model = API.get_game_detailed_info(appState.liveGamePk)
+            model = API.get_game_detailed_info(appState.scoreboardGamePk)
             view = ScoreboardView(model)
             view.render()
 
@@ -94,8 +97,8 @@ def start():
         #----------------------------------------
 
 
-
-
+#TODO: check at startup if woken by button press, if so show a loading screen of some sort while startup/time-sync is happening
+#TODO: create a "basic game" type to hold gamePk, status, date, use in API calls at app startup
 #TODO: Indicate battery level somehow. Red light when low? Icon on screen?
 #TODO: Handle errors such as failed requests due to wifi/internet
 #TODO: (maybe) play sound for runs?

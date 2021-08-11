@@ -14,7 +14,7 @@ def _get_item_at_index(list, index):
     return None
 
 def get_schedule_gamePks(teamId):
-    # returns three gamePks for display on the schedule view
+    # returns three gamePks for display on the schedule view. Returns an array of 3 gamePks. The second one should always be the current Live, or last Final game
     start_date = (utc_now() - timedelta(days=7)).date()
     end_date = (utc_now() + timedelta(days=7)).date()
     scheduledata = get_json(f'https://statsapi.mlb.com/api/v1/schedule?sportId=1&teamId={teamId}&startDate={start_date}&endDate={end_date}&fields=dates,games,gamePk,gameDate,status,abstractGameState')
@@ -23,21 +23,33 @@ def get_schedule_gamePks(teamId):
     for d in scheduledata['dates']:
         for g in d['games']:
             games.append( (g['gamePk'], g['gameDate'], g['status']['abstractGameState']) )
-    # find last "Final" game in list
-    last_finalgame_index = -1
+    # find last "Final" or "Live" game in list
+    last_final_or_live_game_index = -1
     for i in range(len(games)-1, -1, -1):
-        if games[i][2] == 'Final':
-            last_finalgame_index = i
+        if games[i][2] in ['Final', 'Live']:
+            last_final_or_live_game_index = i
             break
-    # now get this one and the next two games
-    gamePks = []
-    for i in range(3):
-        g = _get_item_at_index(games, (last_finalgame_index + i) )
-        gamePk = g[0] if g is not None else None
-        gamePks.append(gamePk)
+    
+    center_game_index = last_final_or_live_game_index
+    if games[last_final_or_live_game_index][2] == 'Final':
+        center_game_index = last_final_or_live_game_index + 1
+    
+    # now get this one and the two before and after
+    games = [
+        _get_item_at_index(games, (center_game_index - 1) ),
+        _get_item_at_index(games, (center_game_index) ),
+        _get_item_at_index(games, (center_game_index + 1) )
+    ]
+
+    gamePks = [
+        (games[0][0] if games[0] is not None else None),
+        (games[1][0] if games[1] is not None else None),
+        (games[2][0] if games[2] is not None else None)
+    ]
+    
     return gamePks
 
-def get_live_gamePk(teamId):
+def get_scoreboard_gamePk_and_status(teamId):
     """If the specified team has a Live game now, returns the gamePk for that game, otherwise None"""
     start_date = (utc_now() - timedelta(days=1)).date()
     end_date = (utc_now() + timedelta(days=1)).date()
@@ -47,12 +59,19 @@ def get_live_gamePk(teamId):
     for d in scheduledata['dates']:
         for g in d['games']:
             games.append( (g['gamePk'], g['gameDate'], g['status']['abstractGameState']) )
-    for g in games:
-        if g[2] == "Live":
-            return g[0]
+    # find last Final/Live game
+    for i in range(len(games)-1, -1, -1):
+        if games[i][2] in ['Final', 'Live']:
+            return { 'gamePk' : games[i][0], 'status' : games[i][2] } 
+    
     return None
 
 def get_game_detailed_info(gamePk):
+    model = GameDetail()
+
+    if gamePk is None or gamePk == '':
+        return None
+
     fields = ['gameData','datetime','dateTime','officialDate','time','ampm','status','abstractGameState',
         'teams','away','home','clubName','abbreviation','liveData','linescore','inningHalf','currentInning',
         'currentInningOrdinal','runs','innings','num','hits','errors','plays','currentPlay','count','balls',
@@ -60,8 +79,7 @@ def get_game_detailed_info(gamePk):
     data = get_json(f'https://statsapi.mlb.com/api/v1.1/game/{gamePk}/feed/live?fields={",".join(fields)}')
     gameData = data['gameData']
     liveData = data['liveData']
-
-    model = GameDetail()
+    
     model.date = gameData['datetime']['officialDate']
     model.localTime = f"{gameData['datetime']['time']} {gameData['datetime']['ampm']}"
     model.dateTimeUtc = parse_iso_time( gameData['datetime']['dateTime'] )
