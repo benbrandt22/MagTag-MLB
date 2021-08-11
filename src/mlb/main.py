@@ -105,8 +105,6 @@ def start():
 
         #----------------------------------------
 
-
-#TODO: check at startup if woken by button press, if so show a loading screen of some sort while startup/time-sync is happening
 #TODO: create a "basic game" type to hold gamePk, status, date, use in API calls at app startup
 #TODO: Indicate battery level somehow. Red light when low? Icon on screen?
 #TODO: Handle errors such as failed requests due to wifi/internet
