@@ -12,12 +12,21 @@ from alarm_utils import pin_alarm_button, time_alarm_sec, all_button_alarms
 from time_utils import utc_to_local, utc_now
 from mlb.models.app_state import AppState
 from mlb.message.message_view import MessageView
+from time_utils import sync_time
 
 def start():
-    print('MLB Project')
+    
+    if(alarm.wake_alarm is not None and type(alarm.wake_alarm) is alarm.time.TimeAlarm):
+        # just woke up from deep sleep after a time alarm, don't show a splash screen, just let it update when the data is ready
+        pass
+    else:
+        # starting up from the power switch or a pin alarm, show a splash screen to indicate it's working
+        MessageView("Loading...").render()
+
+    # set the clock from an online source
+    sync_time()
 
     appState = AppState()
-
     appState.appMode = AppMode.Schedule
     
     # Start up in Scoreboard mode if there's a live game now
@@ -70,7 +79,7 @@ def start():
             else:
                 # deep sleep for 1 hour, or until next game starts.
                 next_game_start_utc = viewModel.get_next_game_start_utc()
-                seconds_to_sleep = 3600
+                seconds_to_sleep = (2 * 3600) # 2 hours
                 if next_game_start_utc is not None:
                     # there's an upcoming game
                     seconds_until_game = (next_game_start_utc - utc_now()).total_seconds()
@@ -96,8 +105,6 @@ def start():
 
         #----------------------------------------
 
-
-#TODO: check at startup if woken by button press, if so show a loading screen of some sort while startup/time-sync is happening
 #TODO: create a "basic game" type to hold gamePk, status, date, use in API calls at app startup
 #TODO: Indicate battery level somehow. Red light when low? Icon on screen?
 #TODO: Handle errors such as failed requests due to wifi/internet
