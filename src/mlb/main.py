@@ -12,12 +12,21 @@ from alarm_utils import pin_alarm_button, time_alarm_sec, all_button_alarms
 from time_utils import utc_to_local, utc_now
 from mlb.models.app_state import AppState
 from mlb.message.message_view import MessageView
+from time_utils import sync_time
 
 def start():
-    print('MLB Project')
+    
+    if(alarm.wake_alarm is not None and type(alarm.wake_alarm) is alarm.time.TimeAlarm):
+        # just woke up from deep sleep after a time alarm, don't show a splash screen, just let it update when the data is ready
+        pass
+    else:
+        # starting up from the power switch or a pin alarm, show a splash screen to indicate it's working
+        MessageView("Loading...").render()
+
+    # set the clock from an online source
+    sync_time()
 
     appState = AppState()
-
     appState.appMode = AppMode.Schedule
     
     # Start up in Scoreboard mode if there's a live game now
