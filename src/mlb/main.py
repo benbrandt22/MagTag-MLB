@@ -70,7 +70,7 @@ def start():
             else:
                 # deep sleep for 1 hour, or until next game starts.
                 next_game_start_utc = viewModel.get_next_game_start_utc()
-                seconds_to_sleep = 3600
+                seconds_to_sleep = (2 * 3600) # 2 hours
                 if next_game_start_utc is not None:
                     # there's an upcoming game
                     seconds_until_game = (next_game_start_utc - utc_now()).total_seconds()
