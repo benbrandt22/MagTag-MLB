@@ -82,7 +82,7 @@ def hour_12(dt):
     return dt.hour
 
 def ampm(dt):
-    return ('AM' if dt.hour <= 12 else 'PM')
+    return ('AM' if dt.hour < 12 else 'PM')
 
 def relative_day(dt):
     """Returns 'Yesterday'/'Today'/'Tomorrow' if the given date is one of these, otherwise None"""
