@@ -6,7 +6,7 @@ from digitalio import DigitalInOut, Direction, Pull
 # shortcut functions for generating device-wakeup alarms
 
 def time_alarm_sec(seconds: int):
-    return alarm.time.TimeAlarm(epoch_time=(time.time() + seconds))
+    return alarm.time.TimeAlarm(epoch_time=(int(time.time()) + seconds))
 
 def all_button_alarms():
     """Returns a set of pin alarms that includes all buttons"""
