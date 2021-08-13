@@ -5,7 +5,7 @@ import displayio
 import terminalio
 from adafruit_display_text import label
 from adafruit_display_shapes.roundrect import RoundRect
-from adafruit_bitmap_font import bitmap_font
+import fonts.fonts as FONTS
 from mlb.schedule.schedule_view_model import ScheduleViewModel
 from time_utils import day_of_week, month_name_short, relative_day, utc_to_local, month_name, hour_12, ampm
 
@@ -15,7 +15,6 @@ class ScheduleView:
 
     def __init__(self, model: ScheduleViewModel):
         self.model = model
-        self.helveticaBold16 = bitmap_font.load_font("/fonts/Helvetica-Bold-16.bdf")
 
     def render(self):
         display = board.DISPLAY
@@ -72,56 +71,56 @@ class ScheduleView:
         date_text = f'{month_name(gametime_local)} {gametime_local.day}'
         time_text = f'{hour_12(gametime_local)}:{gametime_local.minute:02d} {ampm(gametime_local)}'
         
-        day_label = label.Label(terminalio.FONT, text=day_text, color=0x000000)
+        day_label = label.Label(FONTS.OpenSans_12, text=day_text, color=0x000000)
         day_label.anchor_point = (0.5, 0)
-        day_label.anchored_position = (49, 6)
+        day_label.anchored_position = (49, 11)
         game_group.append(day_label)
 
-        date_label = label.Label(terminalio.FONT, text=date_text, color=0x000000)
+        date_label = label.Label(FONTS.OpenSans_12, text=date_text, color=0x000000)
         date_label.anchor_point = (0.5, 0)
-        date_label.anchored_position = (49, 18)
+        date_label.anchored_position = (49, 25)
         game_group.append(date_label)
 
-        time_label = label.Label(terminalio.FONT, text=time_text, color=0x000000)
+        time_label = label.Label(FONTS.OpenSans_12, text=time_text, color=0x000000)
         time_label.anchor_point = (0.5, 0)
-        time_label.anchored_position = (49, 30)
+        time_label.anchored_position = (49, 39)
         game_group.append(time_label)
 
         #Teams
         if game.status == 'Preview': #(no score to show)
-            away_team = label.Label(self.helveticaBold16, text=f"{game.away.teamAbbreviation}", color=0x000000)
+            away_team = label.Label(FONTS.OpenSans_Bold_18, text=f"{game.away.teamAbbreviation}", color=0x000000)
             away_team.anchor_point = (0.5, 0)
-            away_team.anchored_position = (49, 62)
+            away_team.anchored_position = (49, 58)
             game_group.append(away_team)
 
-            at_label = label.Label(terminalio.FONT, text='@', color=0x000000)
+            at_label = label.Label(FONTS.OpenSans_12, text='@', color=0x000000)
             at_label.anchor_point = (0.5, 0)
-            at_label.anchored_position = (49, 77)
+            at_label.anchored_position = (49, 75)
             game_group.append(at_label)
 
-            home_team = label.Label(self.helveticaBold16, text=f"{game.home.teamAbbreviation}", color=0x000000)
+            home_team = label.Label(FONTS.OpenSans_Bold_18, text=f"{game.home.teamAbbreviation}", color=0x000000)
             home_team.anchor_point = (0.5, 0)
-            home_team.anchored_position = (49, 95)
+            home_team.anchored_position = (49, 90)
             game_group.append(home_team)
 
         else:
-            teams = label.Label(self.helveticaBold16, text=f"{game.away.teamAbbreviation}\n{game.home.teamAbbreviation}", color=0x000000)
+            teams = label.Label(FONTS.OpenSans_Bold_18, text=f"{game.away.teamAbbreviation}\n{game.home.teamAbbreviation}", color=0x000000)
             teams.anchor_point = (0, 0)
             teams.anchored_position = (15, 58)
             game_group.append(teams)
-            scores = label.Label(self.helveticaBold16, text=f"{game.away.runs}\n{game.home.runs}", color=0x000000)
+            scores = label.Label(FONTS.OpenSans_Bold_18, text=f"{game.away.runs}\n{game.home.runs}", color=0x000000)
             scores.anchor_point = (1, 0)
             scores.anchored_position = (84, 58)
             game_group.append(scores)
 
         if game.status == 'Live':
-            inning = label.Label(terminalio.FONT, text=f"{game.inningHalf} {game.currentInningOrdinal}", color=0x000000)
+            inning = label.Label(FONTS.OpenSans_12, text=f"{game.inningHalf} {game.currentInningOrdinal}", color=0x000000)
             inning.anchor_point = (0.5, 0)
             inning.anchored_position = (49, 105)
             game_group.append(inning)
 
         if game.status == 'Final':
-            status_label = label.Label(terminalio.FONT, text=f"{game.status}", color=0x000000)
+            status_label = label.Label(FONTS.OpenSans_12, text=f"{game.status}", color=0x000000)
             status_label.anchor_point = (0.5, 0)
             status_label.anchored_position = (49, 105)
             game_group.append(status_label)
