@@ -45,10 +45,6 @@ def start():
         appState.appMode = AppMode.ScoreBoard
 
 
-    #TEMP TESTING IN SCOREBOARD MODE:
-    appState.appMode = AppMode.ScoreBoard
-
-
     while True:
         #----------------------------------------
 
