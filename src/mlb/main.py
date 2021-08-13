@@ -24,14 +24,22 @@ def start():
         MessageView("Loading...").render()
 
     # set the clock from an online source
-    sync_time()
+    try:
+        sync_time()
+    except Exception as ex:
+        MessageView(f"Time Synchronization failed,\nunable to launch.\nRetrying in 1 minute...\n\n({str(ex)})").render()
+        alarm.exit_and_deep_sleep_until_alarms(time_alarm_sec(60))
 
     appState = AppState()
     appState.appMode = AppMode.Schedule
     
     # Start up in Scoreboard mode if there's a live game now
-    scoreboardGame = API.get_scoreboard_gamePk_and_status(appState.teamId)
-    appState.scoreboardGamePk = scoreboardGame['gamePk']
+    try:
+        scoreboardGame = API.get_scoreboard_gamePk_and_status(appState.teamId)
+        appState.scoreboardGamePk = scoreboardGame['gamePk']
+    except Exception as ex:
+        MessageView(f"Unable to load game data,\nretrying in 1 minute...\n\n({str(ex)})").render()
+        alarm.exit_and_deep_sleep_until_alarms(time_alarm_sec(60))
 
     if scoreboardGame['status'] == 'Live':
         appState.appMode = AppMode.ScoreBoard
@@ -62,13 +70,26 @@ def start():
         #----------------------------------------
         if appState.appMode == AppMode.Schedule:
 
-            gamePks = API.get_schedule_gamePks(appState.teamId)
+            tries = 5
+            for n in range(tries):
+                try:
+                    gamePks = API.get_schedule_gamePks(appState.teamId)
 
-            viewModel = ScheduleViewModel(
-                (API.get_game_detailed_info(gamePks[0]) if gamePks[0] is not None else None),
-                (API.get_game_detailed_info(gamePks[1]) if gamePks[1] is not None else None),
-                (API.get_game_detailed_info(gamePks[2]) if gamePks[2] is not None else None)
-            )
+                    viewModel = ScheduleViewModel(
+                        (API.get_game_detailed_info(gamePks[0]) if gamePks[0] is not None else None),
+                        (API.get_game_detailed_info(gamePks[1]) if gamePks[1] is not None else None),
+                        (API.get_game_detailed_info(gamePks[2]) if gamePks[2] is not None else None)
+                    )
+                    break
+                except Exception as ex:
+                    if n < (tries - 1):
+                        print(f"failed to load schedule data, retrying...")
+                        time.sleep(5)
+                    else:
+                        # failed all retries
+                        MessageView(f"Unable to load schedule data,\nrestarting in 1 minute...\n\n({str(ex)})").render()
+                        alarm.exit_and_deep_sleep_until_alarms(time_alarm_sec(60))
+
             view = ScheduleView(viewModel)
             view.render()
 
@@ -92,7 +113,21 @@ def start():
         
         if appState.appMode == AppMode.ScoreBoard:
 
-            model = API.get_game_detailed_info(appState.scoreboardGamePk)
+            tries = 5
+            for n in range(tries):
+                try:
+                    model = API.get_game_detailed_info(appState.scoreboardGamePk)
+                    break
+                except Exception as ex:
+                    if n < (tries - 1):
+                        print(f"failed to load scoreboard data, retrying...")
+                        time.sleep(5)
+                    else:
+                        # failed all retries
+                        MessageView(f"Unable to load game data,\nrestarting in 1 minute...\n\n({str(ex)})").render()
+                        alarm.exit_and_deep_sleep_until_alarms(time_alarm_sec(60))
+
+            
             view = ScoreboardView(model)
             view.render()
 
