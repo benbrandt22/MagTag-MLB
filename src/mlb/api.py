@@ -51,8 +51,8 @@ def get_schedule_gamePks(teamId):
 
 def get_scoreboard_gamePk_and_status(teamId):
     """If the specified team has a Live game now, returns the gamePk for that game, otherwise None"""
-    start_date = (utc_now() - timedelta(days=1)).date()
-    end_date = (utc_now() + timedelta(days=1)).date()
+    start_date = (utc_now() - timedelta(days=7)).date()
+    end_date = (utc_now() + timedelta(days=7)).date()
     scheduledata = get_json(f'https://statsapi.mlb.com/api/v1/schedule?sportId=1&teamId={teamId}&startDate={start_date}&endDate={end_date}&fields=dates,games,gamePk,gameDate,status,abstractGameState')
     games = []
     #(assuming games are provided in chronological order)
