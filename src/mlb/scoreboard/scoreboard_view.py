@@ -9,7 +9,6 @@ from adafruit_display_shapes.rect import Rect
 from adafruit_display_shapes.triangle import Triangle
 from adafruit_display_shapes.circle import Circle
 from adafruit_bitmap_font import bitmap_font
-from mlb.models.game_basic import GameBasic
 from time_utils import utc_to_local, month_name, hour_12, ampm, relative_day, day_of_week, local_now
 
 class ScoreboardView:
