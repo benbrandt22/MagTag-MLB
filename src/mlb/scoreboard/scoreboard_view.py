@@ -3,7 +3,7 @@ import time
 import math
 import board
 import displayio
-import terminalio
+import fonts.fonts as FONTS
 from adafruit_display_text import label
 from adafruit_display_shapes.rect import Rect
 from adafruit_display_shapes.triangle import Triangle
@@ -17,7 +17,6 @@ class ScoreboardView:
 
     def __init__(self, model: GameDetail):
         self.model = model
-        self.helveticaBold16 = bitmap_font.load_font("/fonts/Helvetica-Bold-16.bdf")
 
 
     def render(self):
@@ -73,7 +72,7 @@ class ScoreboardView:
             current_inning.y = 27
             main_group.append(current_inning)
 
-            balls_strikes_label = label.Label(terminalio.FONT, text=f'{self.model.balls}-{self.model.strikes}', color=0x000000)
+            balls_strikes_label = label.Label(FONTS.OpenSans_12, text=f'{self.model.balls}-{self.model.strikes}', color=0x000000)
             balls_strikes_label.anchor_point = (0, 0)
             balls_strikes_label.anchored_position = (205, 45)
             main_group.append(balls_strikes_label)
@@ -102,13 +101,13 @@ class ScoreboardView:
         day_text = ( relative_day(header_time) or day_of_week(header_time) )
         header_text = f'{day_text}, {month_name(header_time)} {header_time.day} / {hour_12(header_time)}:{header_time.minute:02d} {ampm(header_time)}'
 
-        time_label = label.Label(terminalio.FONT, text=header_text, color=0xFFFFFF, background_color=header_bg)
+        time_label = label.Label(FONTS.OpenSans_12, text=header_text, color=0xFFFFFF, background_color=header_bg)
         time_label.anchor_point = (0, 0.5)
         time_label.anchored_position = (3, int(header_height/2))
         header_group.append(time_label)
 
         if self.model.status == 'Live' or self.model.status == 'Final':
-            status_label = label.Label(terminalio.FONT, text=self.model.status, color=0xFFFFFF, background_color=header_bg)
+            status_label = label.Label(FONTS.OpenSans_12, text=self.model.status, color=0xFFFFFF, background_color=header_bg)
             status_label.anchor_point = (1, 0.5)
             status_label.anchored_position = (293, int(header_height/2))
             header_group.append(status_label)
@@ -119,7 +118,7 @@ class ScoreboardView:
         group_width = 90
         teamScore_group = displayio.Group()
 
-        team_label = label.Label(terminalio.FONT, text=teamName, color=0x000000,
+        team_label = label.Label(FONTS.OpenSans_12, text=teamName, color=0x000000,
             padding_right=8, padding_left=8,
             padding_top=1, padding_bottom=19,
             background_color=0xAAAAAA if highlight else 0xFFFFFF )
@@ -127,7 +126,7 @@ class ScoreboardView:
         team_label.anchored_position = ((group_width/2), 0)
         teamScore_group.append(team_label)
 
-        score_label = label.Label(self.helveticaBold16, text=str(runs), color=0x000000)
+        score_label = label.Label(FONTS.OpenSans_Bold_18, text=str(runs), color=0x000000)
         score_label.anchor_point = (0.5, 0)
         score_label.anchored_position = ((group_width/2), 16)
         teamScore_group.append(score_label)
@@ -137,18 +136,18 @@ class ScoreboardView:
     def _innings_group(self):
         innings_group = displayio.Group()
 
-        team_abbrev_width = 21
-        inning_box_width = 20
+        team_abbrev_width = 30
+        inning_box_width = 19
         inning_box_height = 18
         box_stroke = 1
         border_color = 0x000000
 
-        away_label = label.Label(terminalio.FONT, text=self.model.away.teamAbbreviation, color=0x000000)
+        away_label = label.Label(FONTS.OpenSans_12, text=self.model.away.teamAbbreviation, color=0x000000)
         away_label.anchor_point = (0, 0.5)
         away_label.anchored_position = (0, (inning_box_height * 1.5))
         innings_group.append(away_label)
 
-        home_label = label.Label(terminalio.FONT, text=self.model.home.teamAbbreviation, color=0x000000)
+        home_label = label.Label(FONTS.OpenSans_12, text=self.model.home.teamAbbreviation, color=0x000000)
         home_label.anchor_point = (0, 0.5)
         home_label.anchored_position = (0, ((inning_box_height * 2.5)-box_stroke) )
         innings_group.append(home_label)
@@ -156,7 +155,7 @@ class ScoreboardView:
         total_inning_boxes = max(len(self.model.innings), self.model.scheduledInnings)
 
         if total_inning_boxes > 11:
-            inning_box_width = 16
+            inning_box_width = 15
 
         for i in range(total_inning_boxes):
             x = (team_abbrev_width + (i * (inning_box_width - box_stroke)))
@@ -169,7 +168,7 @@ class ScoreboardView:
                 if inn.num == inning_num:
                     inning_data = inn
 
-            inning_num_label = label.Label(terminalio.FONT, text=f"{inning_num}", color=0x000000)
+            inning_num_label = label.Label(FONTS.OpenSans_12, text=f"{inning_num}", color=0x000000)
             inning_num_label.anchor_point = (0.5, 0.5)
             inning_num_label.anchored_position = (text_x, (inning_box_height * 0.5))
             innings_group.append(inning_num_label)
@@ -180,12 +179,12 @@ class ScoreboardView:
             innings_group.append(home_box)
 
             if inning_data is not None:
-                inning_away_label = label.Label(terminalio.FONT, text=f'{inning_data.awayRuns}', color=0x000000)
+                inning_away_label = label.Label(FONTS.OpenSans_12, text=f'{inning_data.awayRuns}', color=0x000000)
                 inning_away_label.anchor_point = (0.5, 0.5)
                 inning_away_label.anchored_position = (text_x, (inning_box_height * 1.5))
                 innings_group.append(inning_away_label)
 
-                inning_home_label = label.Label(terminalio.FONT, text=f'{inning_data.homeRuns}', color=0x000000)
+                inning_home_label = label.Label(FONTS.OpenSans_12, text=f'{inning_data.homeRuns}', color=0x000000)
                 inning_home_label.anchor_point = (0.5, 0.5)
                 inning_home_label.anchored_position = (text_x, ((inning_box_height * 2.5) - box_stroke) )
                 innings_group.append(inning_home_label)
@@ -204,7 +203,7 @@ class ScoreboardView:
             bottom = Triangle(0,9 , 8,9 , 4,13, fill=0x000000)
             current_inning_group.append(bottom)
 
-        num_label = label.Label(self.helveticaBold16, text=str(self.model.currentInning or '?'), color=0x000000)
+        num_label = label.Label(FONTS.OpenSans_Bold_18, text=str(self.model.currentInning or '?'), color=0x000000)
         num_label.anchor_point = (0, 0.5)
         num_label.anchored_position = (11, 8)
         current_inning_group.append(num_label)
@@ -279,7 +278,7 @@ class ScoreboardView:
             header_text = (['R','H','E'][i])
             attr = (['runs','hits','errors'][i])
             
-            header_label = label.Label(terminalio.FONT, text=header_text, color=0x000000)
+            header_label = label.Label(FONTS.OpenSans_12, text=header_text, color=0x000000)
             header_label.anchor_point = (0.5, 0.5)
             header_label.anchored_position = (text_x, (box_height * 0.5))
             rhe_group.append(header_label)
@@ -289,12 +288,12 @@ class ScoreboardView:
             home_box = Rect(x, ((2*box_height) - box_stroke), box_width, box_height, fill=0xFFFFFF, outline=border_color, stroke=box_stroke)
             rhe_group.append(home_box)
 
-            inning_away_label = label.Label(terminalio.FONT, text=str(getattr(self.model.away, attr)), color=0x000000)
+            inning_away_label = label.Label(FONTS.OpenSans_12, text=str(getattr(self.model.away, attr)), color=0x000000)
             inning_away_label.anchor_point = (0.5, 0.5)
             inning_away_label.anchored_position = (text_x, (box_height * 1.5))
             rhe_group.append(inning_away_label)
 
-            inning_home_label = label.Label(terminalio.FONT, text=str(getattr(self.model.home, attr)), color=0x000000)
+            inning_home_label = label.Label(FONTS.OpenSans_12, text=str(getattr(self.model.home, attr)), color=0x000000)
             inning_home_label.anchor_point = (0.5, 0.5)
             inning_home_label.anchored_position = (text_x, ((box_height * 2.5) - box_stroke) )
             rhe_group.append(inning_home_label)
