@@ -104,14 +104,17 @@ class ScheduleView:
             game_group.append(home_team)
 
         else:
-            teams = label.Label(FONTS.OpenSans_Bold_18, text=f"{game.away.teamAbbreviation}\n{game.home.teamAbbreviation}", color=0x000000)
-            teams.anchor_point = (0, 0)
-            teams.anchored_position = (15, 58)
-            game_group.append(teams)
-            scores = label.Label(FONTS.OpenSans_Bold_18, text=f"{game.away.runs}\n{game.home.runs}", color=0x000000)
-            scores.anchor_point = (1, 0)
-            scores.anchored_position = (84, 58)
-            game_group.append(scores)
+            team_y = 58
+            for team in [ game.away, game.home ]:
+                team_abbrev = label.Label(FONTS.OpenSans_Bold_18, text=f"{team.teamAbbreviation}", color=0x000000)
+                team_abbrev.anchor_point = (0, 0)
+                team_abbrev.anchored_position = (15, team_y)
+                game_group.append(team_abbrev)
+                score = label.Label(FONTS.OpenSans_Bold_18, text=f"{team.runs}", color=0x000000)
+                score.anchor_point = (1, 0)
+                score.anchored_position = (84, team_y)
+                game_group.append(score)
+                team_y = team_y + 20
 
         if game.status == 'Live':
             inning = label.Label(FONTS.OpenSans_12, text=f"{game.inningHalf} {game.currentInningOrdinal}", color=0x000000)
