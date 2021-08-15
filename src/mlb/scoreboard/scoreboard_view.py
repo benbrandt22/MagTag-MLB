@@ -48,12 +48,12 @@ class ScoreboardView:
 
         away_score_group = self._team_score_group(self.model.away.teamName, self.model.away.runs, highlightAway )
         away_score_group.x = 5
-        away_score_group.y = 25
+        away_score_group.y = 27
         main_group.append(away_score_group)
 
         home_score_group = self._team_score_group(self.model.home.teamName, self.model.home.runs, highlightHome )
         home_score_group.x = 100
-        home_score_group.y = 25
+        home_score_group.y = 27
         main_group.append(home_score_group)
 
         innings = self._innings_group()
@@ -120,7 +120,7 @@ class ScoreboardView:
 
         team_label = label.Label(FONTS.OpenSans_12, text=teamName, color=0x000000,
             padding_right=8, padding_left=8,
-            padding_top=1, padding_bottom=19,
+            padding_top=3, padding_bottom=23,
             background_color=0xAAAAAA if highlight else 0xFFFFFF )
         team_label.anchor_point = (0.5, 0)
         team_label.anchored_position = ((group_width/2), 0)
