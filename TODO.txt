@@ -9,6 +9,8 @@ This file serves as a place to collect various changes/fixes/improvements I want
 
 - create a "basic game" type to hold gamePk, status, date, use in API calls at app startup
 
+- Analyze past MLB games to see how often games go into extra innings, and typically how many innings. Work on better scoreboard display logic for high-inning games.
+
 - Indicate battery level somehow. Red light when low? Icon on screen?
 
 - Handle errors such as failed requests due to wifi/internet
