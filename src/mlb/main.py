@@ -140,12 +140,3 @@ def start():
                 alarm.exit_and_deep_sleep_until_alarms(time_alarm_sec(scoreboard_retention_time_seconds), pin_alarm_button(board.BUTTON_B), pin_alarm_button(board.BUTTON_C))
 
         #----------------------------------------
-
-#TODO: add boolean methods/properties to the game detail object to check if it's Live/Final/Preview/Delayed/Postponed/etc. Move away from checking the string value of status all the time.
-#TODO: Schedule - when not in a live game, sleep until midnight instead of every 2 hours, because midnight is the only time the view will change (the day labels)
-#TODO: Schedule - for finished games, if they ended in extra innings, show which inning they ended in
-#TODO: create a "basic game" type to hold gamePk, status, date, use in API calls at app startup
-#TODO: Indicate battery level somehow. Red light when low? Icon on screen?
-#TODO: Handle errors such as failed requests due to wifi/internet
-#TODO: (maybe) play sound for runs? (Circuitpython on this board currently can only support playing simple tones, not wav files)
-#TODO: (maybe) only update display when model changes?
