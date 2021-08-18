@@ -44,6 +44,7 @@ def start():
     if scoreboardGame['status'] == 'Live':
         appState.appMode = AppMode.ScoreBoard
 
+
     while True:
         #----------------------------------------
 

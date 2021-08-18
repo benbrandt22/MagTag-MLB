@@ -1,7 +1,6 @@
-from mlb.models.game_detail import GameDetail
 import time
 from adafruit_display_text import label
-import terminalio
+import fonts.fonts as FONTS
 import board
 import displayio
 
@@ -28,7 +27,7 @@ class MessageView:
         main_group.append(bg_group)
 
         # Message label
-        message_label = label.Label(terminalio.FONT, text=self._message, color=0x000000)
+        message_label = label.Label(FONTS.OpenSans_12, text=self._message, color=0x000000)
         message_label.anchor_point = (0.5, 0.5)
         message_label.anchored_position = (display.width // 2, display.height // 2)
         main_group.append(message_label)

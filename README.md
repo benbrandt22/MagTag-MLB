@@ -35,3 +35,9 @@ secrets = {
 The MagTag allows you to just copy the code files to the device when connected via USB, and any changes made on the device will restart the program. So the simplest way to get started is to just copy the contents of the `src` folder directly to the MagTag.
 
 Personally, I like to edit multiple files at a time in VS Code, and only push to the device when I'm ready. So I wrote the `deploy.ps1` powershell script. When ready to deploy some changes, run this script to copy the updated files to the MagTag.
+
+## Attribution/Credits/Etc
+
+Data provided by the MLB Stats API is copyright MLB Advanced Media, L.P.
+
+On-screen fonts were generated from the [Open Sans font on Google Fonts](https://fonts.google.com/specimen/Open+Sans), and converted to BDF format using [FontForge](https://fontforge.org/). Individual letters were edited to look better on the e-ink display.
