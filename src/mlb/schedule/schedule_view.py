@@ -2,7 +2,6 @@ from mlb.models.game_detail import GameDetail
 import time
 import board
 import displayio
-import terminalio
 from adafruit_display_text import label
 from adafruit_display_shapes.roundrect import RoundRect
 import fonts.fonts as FONTS
