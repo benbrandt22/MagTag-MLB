@@ -152,7 +152,7 @@ class ScoreboardView:
         home_label.anchored_position = (0, ((inning_box_height * 2.5)-box_stroke) )
         innings_group.append(home_label)
 
-        total_inning_boxes = max(len(self.model.innings), self.model.scheduledInnings)
+        total_inning_boxes = max(self.model.inningCount, self.model.scheduledInnings)
 
         if total_inning_boxes > 11:
             inning_box_width = 15
