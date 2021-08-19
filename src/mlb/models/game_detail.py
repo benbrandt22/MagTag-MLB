@@ -36,4 +36,7 @@ class GameDetail:
         self.postOnSecond = False
         self.postOnThird = False
 
+    @property
+    def isFinal(self):
+        return self.status == 'Final'
 

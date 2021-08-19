@@ -121,7 +121,7 @@ class ScheduleView:
             inning.anchored_position = (49, 105)
             game_group.append(inning)
 
-        if game.status == 'Final':
+        if game.isFinal:
             status_label = label.Label(FONTS.OpenSans_12, text=f"{game.status}", color=0x000000)
             status_label.anchor_point = (0.5, 0)
             status_label.anchored_position = (49, 105)

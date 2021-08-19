@@ -106,7 +106,7 @@ class ScoreboardView:
         time_label.anchored_position = (3, int(header_height/2))
         header_group.append(time_label)
 
-        if self.model.status == 'Live' or self.model.status == 'Final':
+        if self.model.status == 'Live' or self.model.isFinal:
             status_label = label.Label(FONTS.OpenSans_12, text=self.model.status, color=0xFFFFFF, background_color=header_bg)
             status_label.anchor_point = (1, 0.5)
             status_label.anchored_position = (293, int(header_height/2))

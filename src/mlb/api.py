@@ -93,7 +93,7 @@ def get_game_detailed_info(gamePk):
         model.inningHalf = liveData['linescore']['inningHalf']
         model.currentInning = liveData['linescore']['currentInning']
         model.currentInningOrdinal = liveData['linescore']['currentInningOrdinal']
-    if model.status == "Live" or model.status == "Final":
+    if model.status == "Live" or model.isFinal:
         model.away.runs = liveData['linescore']['teams']['away']['runs']
         model.away.hits = liveData['linescore']['teams']['away']['hits']
         model.away.errors = liveData['linescore']['teams']['away']['errors']
@@ -101,7 +101,7 @@ def get_game_detailed_info(gamePk):
         model.home.hits = liveData['linescore']['teams']['home']['hits']
         model.home.errors = liveData['linescore']['teams']['home']['errors']
         
-    if model.status == "Live" or model.status == "Final":
+    if model.status == "Live" or model.isFinal:
         for i in liveData['linescore']['innings']:
             num = i['num']
             awayRuns = i['away']['runs'] if 'runs' in i['away'] else ''
