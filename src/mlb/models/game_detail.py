@@ -38,14 +38,17 @@ class GameDetail:
 
     @property
     def isFinal(self):
+        """Returns true if the game has finished"""
         return self.status == 'Final'
 
     @property
     def isLive(self):
+        """Returns true if the game is currently being played"""
         return self.status == 'Live'
 
     @property
     def isPreview(self):
+        """Returns true if the game has not started yet"""
         return self.status == 'Preview'
 
     @property
