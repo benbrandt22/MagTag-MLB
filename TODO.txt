@@ -1,19 +1,17 @@
 This file serves as a place to collect various changes/fixes/improvements I want to make to the project
 
 
-- add boolean methods/properties to the game detail object to check if it's Live/Final/Preview/Delayed/Postponed/etc. Move away from checking the string value of status all the time.
+- add boolean methods/properties to the game detail object to check if it's Delayed/Postponed
+
+- Figure out how to identify and properly handle delayed/postponed games
 
 - Schedule - when not in a live game, sleep until midnight instead of every 2 hours, because midnight is the only time the view will change (the day labels)
-
-- Schedule - for finished games, if they ended in extra innings, show which inning they ended in
 
 - create a "basic game" type to hold gamePk, status, date, use in API calls at app startup
 
 - Analyze past MLB games to see how often games go into extra innings, and typically how many innings. Work on better scoreboard display logic for high-inning games.
 
 - Indicate battery level somehow. Red light when low? Icon on screen?
-
-- Handle errors such as failed requests due to wifi/internet
 
 - (maybe) play sound for runs? (Circuitpython on this board currently can only support playing simple tones, not wav files)
 
