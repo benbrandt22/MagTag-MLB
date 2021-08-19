@@ -1,7 +1,6 @@
 from adafruit_datetime import datetime, date, timedelta
 from time_utils import utc_now, parse_iso_time, utc_to_local
 from connect import get_json
-from mlb.models.game_basic import GameBasic
 from mlb.models.game_detail import GameDetail, InningDetail
 
 
