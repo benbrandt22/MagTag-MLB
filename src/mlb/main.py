@@ -132,7 +132,7 @@ def start():
             view = ScoreboardView(model)
             view.render()
 
-            if (model.status == "Live"):
+            if (model.isLive):
                 # light sleep for 60 seconds from now.
                 alarm.light_sleep_until_alarms(time_alarm_sec(60), pin_alarm_button(board.BUTTON_B), pin_alarm_button(board.BUTTON_C))
             else:

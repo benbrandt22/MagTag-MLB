@@ -43,8 +43,8 @@ class ScoreboardView:
         header.y = 0
         main_group.append(header)
 
-        highlightAway = (self.model.status == 'Live' and self.model.inningHalf == "Top")
-        highlightHome = (self.model.status == 'Live' and self.model.inningHalf == "Bottom")
+        highlightAway = (self.model.isLive and self.model.inningHalf == "Top")
+        highlightHome = (self.model.isLive and self.model.inningHalf == "Bottom")
 
         away_score_group = self._team_score_group(self.model.away.teamName, self.model.away.runs, highlightAway )
         away_score_group.x = 5
@@ -66,7 +66,7 @@ class ScoreboardView:
         runs_hits_errors.y = innings.y
         main_group.append(runs_hits_errors)
 
-        if self.model.status == 'Live':
+        if self.model.isLive:
             current_inning = self._current_inning_group()
             current_inning.x = 205
             current_inning.y = 27
@@ -95,7 +95,7 @@ class ScoreboardView:
 
         # Default to showing the game start time
         header_time = utc_to_local(self.model.dateTimeUtc)
-        if(self.model.status == "Live"):
+        if(self.model.isLive):
             header_time = local_now()
 
         day_text = ( relative_day(header_time) or day_of_week(header_time) )
@@ -106,7 +106,7 @@ class ScoreboardView:
         time_label.anchored_position = (3, int(header_height/2))
         header_group.append(time_label)
 
-        if self.model.status == 'Live' or self.model.isFinal:
+        if self.model.isLive or self.model.isFinal:
             status_label = label.Label(FONTS.OpenSans_12, text=self.model.status, color=0xFFFFFF, background_color=header_bg)
             status_label.anchor_point = (1, 0.5)
             status_label.anchored_position = (293, int(header_height/2))

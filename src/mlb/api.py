@@ -89,11 +89,11 @@ def get_game_detailed_info(gamePk):
     model.away.teamAbbreviation = gameData['teams']['away']['abbreviation']
     model.home.teamAbbreviation = gameData['teams']['home']['abbreviation']
     model.scheduledInnings = int(liveData['linescore']['scheduledInnings'] or 9)
-    if model.status == "Live":
+    if model.isLive:
         model.inningHalf = liveData['linescore']['inningHalf']
         model.currentInning = liveData['linescore']['currentInning']
         model.currentInningOrdinal = liveData['linescore']['currentInningOrdinal']
-    if model.status == "Live" or model.isFinal:
+    if model.isLive or model.isFinal:
         model.away.runs = liveData['linescore']['teams']['away']['runs']
         model.away.hits = liveData['linescore']['teams']['away']['hits']
         model.away.errors = liveData['linescore']['teams']['away']['errors']
@@ -101,14 +101,14 @@ def get_game_detailed_info(gamePk):
         model.home.hits = liveData['linescore']['teams']['home']['hits']
         model.home.errors = liveData['linescore']['teams']['home']['errors']
         
-    if model.status == "Live" or model.isFinal:
+    if model.isLive or model.isFinal:
         for i in liveData['linescore']['innings']:
             num = i['num']
             awayRuns = i['away']['runs'] if 'runs' in i['away'] else ''
             homeRuns = i['home']['runs'] if 'runs' in i['home'] else ''
             model.innings.append( InningDetail(num, awayRuns, homeRuns) )
 
-    if model.status == "Live":
+    if model.isLive:
         # get current play info
         current_play = liveData['plays']['currentPlay']
         model.balls = current_play['count']['balls']

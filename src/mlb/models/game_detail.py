@@ -40,3 +40,6 @@ class GameDetail:
     def isFinal(self):
         return self.status == 'Final'
 
+    @property
+    def isLive(self):
+        return self.status == 'Live'

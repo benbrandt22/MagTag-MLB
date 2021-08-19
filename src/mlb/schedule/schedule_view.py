@@ -115,7 +115,7 @@ class ScheduleView:
                 game_group.append(score)
                 team_y = team_y + 20
 
-        if game.status == 'Live':
+        if game.isLive:
             inning = label.Label(FONTS.OpenSans_12, text=f"{game.inningHalf} {game.currentInningOrdinal}", color=0x000000)
             inning.anchor_point = (0.5, 0)
             inning.anchored_position = (49, 105)
