@@ -47,3 +47,13 @@ class GameDetail:
     @property
     def isPreview(self):
         return self.status == 'Preview'
+
+    @property
+    def isInningTop(self):
+        """Returns true if the game is Live and is in the Top half of the inning"""
+        return (self.isLive and self.inningHalf == 'Top')
+
+    @property
+    def isInningBottom(self):
+        """Returns true if the game is Live and is in the Bottom half of the inning"""
+        return (self.isLive and self.inningHalf == 'Bottom')

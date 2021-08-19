@@ -43,8 +43,8 @@ class ScoreboardView:
         header.y = 0
         main_group.append(header)
 
-        highlightAway = (self.model.isLive and self.model.inningHalf == "Top")
-        highlightHome = (self.model.isLive and self.model.inningHalf == "Bottom")
+        highlightAway = self.model.isInningTop
+        highlightHome = self.model.isInningBottom
 
         away_score_group = self._team_score_group(self.model.away.teamName, self.model.away.runs, highlightAway )
         away_score_group.x = 5
@@ -195,11 +195,11 @@ class ScoreboardView:
     def _current_inning_group(self):
         current_inning_group = displayio.Group()
 
-        if self.model.inningHalf == 'Top':
+        if self.model.isInningTop:
             top = Triangle(0,7 , 8,7 , 4,3, fill=0x000000)
             current_inning_group.append(top)
 
-        if self.model.inningHalf == 'Bottom':
+        if self.model.isInningBottom:
             bottom = Triangle(0,9 , 8,9 , 4,13, fill=0x000000)
             current_inning_group.append(bottom)
 
