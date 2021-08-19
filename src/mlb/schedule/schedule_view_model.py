@@ -13,7 +13,7 @@ class ScheduleViewModel:
         return ((game is not None) and (game.isLive))
 
     def _is_preview(self, game: GameDetail):
-        return ((game is not None) and (game.status == "Preview"))
+        return ((game is not None) and (game.isPreview))
 
     def get_next_game_start_utc(self):
         """Returns the start time of the next Preview game in the set. Returns None if there are none."""

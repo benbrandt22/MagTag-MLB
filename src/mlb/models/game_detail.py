@@ -43,3 +43,7 @@ class GameDetail:
     @property
     def isLive(self):
         return self.status == 'Live'
+
+    @property
+    def isPreview(self):
+        return self.status == 'Preview'

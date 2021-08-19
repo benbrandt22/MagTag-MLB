@@ -86,7 +86,7 @@ class ScheduleView:
         game_group.append(time_label)
 
         #Teams
-        if game.status == 'Preview': #(no score to show)
+        if game.isPreview: #(no score to show)
             away_team = label.Label(FONTS.OpenSans_Bold_18, text=f"{game.away.teamAbbreviation}", color=0x000000)
             away_team.anchor_point = (0.5, 0)
             away_team.anchored_position = (49, 58)
