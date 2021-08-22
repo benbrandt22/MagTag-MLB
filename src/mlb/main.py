@@ -27,7 +27,7 @@ def start():
     try:
         sync_time()
     except Exception as ex:
-        MessageView(f"Time Synchronization failed,\nunable to launch.\nRetrying in 1 minute...\n\n({str(ex)})").render()
+        MessageView(f"Time Synchronization failed,\nunable to launch.\nRetrying in 1 minute...\n\n({repr(ex)})").render()
         alarm.exit_and_deep_sleep_until_alarms(time_alarm_sec(60))
 
     appState = AppState()
@@ -38,7 +38,7 @@ def start():
         scoreboardGame = API.get_scoreboard_gamePk_and_status(appState.teamId)
         appState.scoreboardGamePk = scoreboardGame['gamePk']
     except Exception as ex:
-        MessageView(f"Unable to load game data,\nretrying in 1 minute...\n\n({str(ex)})").render()
+        MessageView(f"Unable to load game data,\nretrying in 1 minute...\n\n({repr(ex)})").render()
         alarm.exit_and_deep_sleep_until_alarms(time_alarm_sec(60))
 
     if scoreboardGame['status'] == 'Live':
@@ -88,7 +88,7 @@ def start():
                         time.sleep(5)
                     else:
                         # failed all retries
-                        MessageView(f"Unable to load schedule data,\nrestarting in 1 minute...\n\n({str(ex)})").render()
+                        MessageView(f"Unable to load schedule data,\nrestarting in 1 minute...\n\n({repr(ex)})").render()
                         alarm.exit_and_deep_sleep_until_alarms(time_alarm_sec(60))
 
             view = ScheduleView(viewModel)
@@ -125,7 +125,7 @@ def start():
                         time.sleep(5)
                     else:
                         # failed all retries
-                        MessageView(f"Unable to load game data,\nrestarting in 1 minute...\n\n({str(ex)})").render()
+                        MessageView(f"Unable to load game data,\nrestarting in 1 minute...\n\n({repr(ex)})").render()
                         alarm.exit_and_deep_sleep_until_alarms(time_alarm_sec(60))
 
             
