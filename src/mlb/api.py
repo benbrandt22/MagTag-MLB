@@ -16,12 +16,18 @@ def get_schedule_gamePks(teamId):
     # returns three gamePks for display on the schedule view. Returns an array of 3 gamePks. The second one should always be the current Live, or last Final game
     start_date = (utc_now() - timedelta(days=7)).date()
     end_date = (utc_now() + timedelta(days=7)).date()
-    scheduledata = get_json(f'https://statsapi.mlb.com/api/v1/schedule?sportId=1&teamId={teamId}&startDate={start_date}&endDate={end_date}&fields=dates,games,gamePk,gameDate,status,abstractGameState')
+
+    fields = ['dates','games','gamePk','gameDate','status','abstractGameState','detailedState']
+    scheduledata = get_json(f'https://statsapi.mlb.com/api/v1/schedule?sportId=1&teamId={teamId}&startDate={start_date}&endDate={end_date}&fields={",".join(fields)}')
     games = []
-    #(assuming games are provided in chronological order)
     for d in scheduledata['dates']:
         for g in d['games']:
-            games.append( (g['gamePk'], g['gameDate'], g['status']['abstractGameState']) )
+            # only include games that aren't Postponed or Cancelled
+            detailedState = g['status']['detailedState']
+            if (not detailedState.startswith('Cancelled')) and (not detailedState.startswith('Postponed')):
+                games.append( (g['gamePk'], g['gameDate'], g['status']['abstractGameState']) )
+    games.sort(key=lambda g: g[1]) # sort by date
+
     # find last "Final" or "Live" game in list
     last_final_or_live_game_index = -1
     for i in range(len(games)-1, -1, -1):
@@ -52,12 +58,19 @@ def get_scoreboard_gamePk_and_status(teamId):
     """If the specified team has a Live game now, returns the gamePk for that game, otherwise None"""
     start_date = (utc_now() - timedelta(days=7)).date()
     end_date = (utc_now() + timedelta(days=7)).date()
-    scheduledata = get_json(f'https://statsapi.mlb.com/api/v1/schedule?sportId=1&teamId={teamId}&startDate={start_date}&endDate={end_date}&fields=dates,games,gamePk,gameDate,status,abstractGameState')
+
+    fields = ['dates','games','gamePk','gameDate','status','abstractGameState','detailedState']
+    scheduledata = get_json(f'https://statsapi.mlb.com/api/v1/schedule?sportId=1&teamId={teamId}&startDate={start_date}&endDate={end_date}&fields={",".join(fields)}')
     games = []
-    #(assuming games are provided in chronological order)
+    
     for d in scheduledata['dates']:
         for g in d['games']:
-            games.append( (g['gamePk'], g['gameDate'], g['status']['abstractGameState']) )
+            # only include games that aren't Postponed or Cancelled
+            detailedState = g['status']['detailedState']
+            if (not detailedState.startswith('Cancelled')) and (not detailedState.startswith('Postponed')):
+                games.append( (g['gamePk'], g['gameDate'], g['status']['abstractGameState']) )
+    games.sort(key=lambda g: g[1]) # sort by date
+
     # find last Final/Live game
     for i in range(len(games)-1, -1, -1):
         if games[i][2] in ['Final', 'Live']:
