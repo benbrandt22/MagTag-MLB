@@ -178,13 +178,15 @@ class ScoreboardView:
             home_box = Rect(x, ((2*inning_box_height) - box_stroke), inning_box_width, inning_box_height, fill=0xFFFFFF, outline=border_color, stroke=box_stroke)
             innings_group.append(home_box)
 
+            box_default_text = 'x' if self.model.isFinal else ''
+
             if inning_data is not None:
-                inning_away_label = label.Label(FONTS.OpenSans_12, text=f'{inning_data.awayRuns}', color=0x000000)
+                inning_away_label = label.Label(FONTS.OpenSans_12, text=f'{str(inning_data.awayRuns) or box_default_text}', color=0x000000)
                 inning_away_label.anchor_point = (0.5, 0.5)
                 inning_away_label.anchored_position = (text_x, (inning_box_height * 1.5))
                 innings_group.append(inning_away_label)
 
-                inning_home_label = label.Label(FONTS.OpenSans_12, text=f'{inning_data.homeRuns}', color=0x000000)
+                inning_home_label = label.Label(FONTS.OpenSans_12, text=f'{str(inning_data.homeRuns) or box_default_text}', color=0x000000)
                 inning_home_label.anchor_point = (0.5, 0.5)
                 inning_home_label.anchored_position = (text_x, ((inning_box_height * 2.5) - box_stroke) )
                 innings_group.append(inning_home_label)

@@ -5,8 +5,8 @@ class InningDetail:
         self.homeRuns = homeRuns
 
     num = ''
-    awayRuns = ''
-    homeRuns = ''
+    awayRuns = None
+    homeRuns = None
 
 class GameTeamDetail:
     def __init__(self):
