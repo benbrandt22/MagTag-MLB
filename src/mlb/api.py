@@ -84,7 +84,7 @@ def get_game_detailed_info(gamePk):
     if gamePk is None or gamePk == '':
         return None
 
-    fields = ['gameData','datetime','dateTime','officialDate','time','ampm','status','abstractGameState',
+    fields = ['gameData','datetime','dateTime','officialDate','time','ampm','status','abstractGameState','detailedState',
         'teams','away','home','clubName','abbreviation','liveData','linescore','inningHalf','currentInning',
         'currentInningOrdinal','runs','innings','num','hits','errors','plays','currentPlay','count','balls',
         'strikes','outs','matchup','postOnFirst','postOnSecond','postOnThird','scheduledInnings']
@@ -95,7 +95,8 @@ def get_game_detailed_info(gamePk):
     model.date = gameData['datetime']['officialDate']
     model.localTime = f"{gameData['datetime']['time']} {gameData['datetime']['ampm']}"
     model.dateTimeUtc = parse_iso_time( gameData['datetime']['dateTime'] )
-    model.status = gameData['status']['abstractGameState']
+    model.abstractGameState = gameData['status']['abstractGameState']
+    model.detailedState = gameData['status']['detailedState']
     model.away.teamName = gameData['teams']['away']['clubName']
     model.home.teamName = gameData['teams']['home']['clubName']
     model.away.teamAbbreviation = gameData['teams']['away']['abbreviation']

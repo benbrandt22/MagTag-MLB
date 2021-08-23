@@ -1,11 +1,6 @@
 This file serves as a place to collect various changes/fixes/improvements I want to make to the project
 
-
-- add boolean methods/properties to the game detail object to check if it's Delayed/Postponed
-
 - Figure out how to identify and properly handle delayed/postponed games
-
-- Schedule - when not in a live game, sleep until midnight instead of every 2 hours, because midnight is the only time the view will change (the day labels)
 
 - create a "basic game" type to hold gamePk, status, date, use in API calls at app startup
 

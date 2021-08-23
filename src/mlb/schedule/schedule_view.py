@@ -122,9 +122,9 @@ class ScheduleView:
             game_group.append(inning)
 
         if game.isFinal:
-            status_text = game.status
+            status_text = game.abstractGameState
             if game.isExtraInnings:
-                status_text = f'{game.status} / {game.inningCount}'
+                status_text = f'{game.abstractGameState} / {game.inningCount}'
             status_label = label.Label(FONTS.OpenSans_12, text=status_text, color=0x000000)
             status_label.anchor_point = (0.5, 0)
             status_label.anchored_position = (49, 105)

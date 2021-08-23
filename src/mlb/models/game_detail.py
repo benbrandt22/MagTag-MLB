@@ -23,7 +23,8 @@ class GameDetail:
         self.date = ''
         self.localTime = ''
         self.dateTimeUtc = ''
-        self.status = ''
+        self.abstractGameState = ''
+        self.detailedState = ''
         self.scheduledInnings = 9
         self.inningHalf = ''
         self.currentInning = ''
@@ -39,17 +40,17 @@ class GameDetail:
     @property
     def isFinal(self):
         """Returns true if the game has finished"""
-        return self.status == 'Final'
+        return self.abstractGameState == 'Final'
 
     @property
     def isLive(self):
         """Returns true if the game is currently being played"""
-        return self.status == 'Live'
+        return self.abstractGameState == 'Live'
 
     @property
     def isPreview(self):
         """Returns true if the game has not started yet"""
-        return self.status == 'Preview'
+        return self.abstractGameState == 'Preview'
 
     @property
     def isInningTop(self):
@@ -70,3 +71,18 @@ class GameDetail:
     def isExtraInnings(self):
         """Returns true if the game went into extra innings"""
         return (self.inningCount > self.scheduledInnings)
+
+    @property
+    def isPostponed(self):
+        """Returns true if the game was postponed"""
+        return self.detailedState.startswith('Postponed')
+
+    @property
+    def isDelayed(self):
+        """Returns true if the game was delayed"""
+        return self.detailedState.startswith('Delayed')
+
+    @property
+    def isCancelled(self):
+        """Returns true if the game was cancelled"""
+        return self.detailedState.startswith('Cancelled')
