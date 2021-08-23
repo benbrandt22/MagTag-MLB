@@ -1,5 +1,5 @@
 from mlb.schedule.schedule_view_model import ScheduleViewModel
-from adafruit_datetime import datetime, date
+from adafruit_datetime import datetime, timedelta
 import time
 import json
 import board
@@ -9,13 +9,13 @@ from mlb.scoreboard.scoreboard_view import ScoreboardView
 import mlb.api as API
 import alarm
 from alarm_utils import pin_alarm_button, time_alarm_sec, all_button_alarms
-from time_utils import utc_to_local, utc_now
+from time_utils import local_now, utc_to_local, utc_now
 from mlb.models.app_state import AppState
 from mlb.message.message_view import MessageView
 from time_utils import sync_time
 
 def start():
-    
+
     if(alarm.wake_alarm is not None and type(alarm.wake_alarm) is alarm.time.TimeAlarm):
         # just woke up from deep sleep after a time alarm, don't show a splash screen, just let it update when the data is ready
         pass
@@ -95,19 +95,25 @@ def start():
             view.render()
 
             if(viewModel.has_live_game()):
-                # light sleep for 60 seconds from now to keep score updated during live game.
-                alarm.light_sleep_until_alarms(time_alarm_sec(60), pin_alarm_button(board.BUTTON_B), pin_alarm_button(board.BUTTON_C))
+                # light sleep for 90 seconds from now to keep score updated during live game.
+                alarm.light_sleep_until_alarms(time_alarm_sec(90), pin_alarm_button(board.BUTTON_B), pin_alarm_button(board.BUTTON_C))
 
             else:
-                # deep sleep for 1 hour, or until next game starts.
+                # deep sleep until tomorrow morning, or until next game starts.
+                tomorrow = (local_now() + timedelta(days=1)).date()
+                next_midnight = datetime(tomorrow.year, tomorrow.month, tomorrow.day, 0, 0, 0)
+                seconds_to_sleep = ((next_midnight - local_now()).total_seconds() + 60) # (sleep until slightly past midnight, then the "day" labels can update)
+                print(f'Seconds until midnight = {seconds_to_sleep}')
+                
                 next_game_start_utc = viewModel.get_next_game_start_utc()
-                seconds_to_sleep = (2 * 3600) # 2 hours
                 if next_game_start_utc is not None:
                     # there's an upcoming game
                     seconds_until_game = (next_game_start_utc - utc_now()).total_seconds()
+                    print(f'Seconds until game = {seconds_until_game}')
                     if (seconds_until_game < seconds_to_sleep):
                         seconds_to_sleep = seconds_until_game
 
+                print(f'Deep sleeping for {seconds_to_sleep} seconds...')
                 alarm.exit_and_deep_sleep_until_alarms(time_alarm_sec(seconds_to_sleep), pin_alarm_button(board.BUTTON_B), pin_alarm_button(board.BUTTON_C))
 
         #----------------------------------------
@@ -134,7 +140,7 @@ def start():
 
             if (model.isLive):
                 # light sleep for 60 seconds from now.
-                alarm.light_sleep_until_alarms(time_alarm_sec(60), pin_alarm_button(board.BUTTON_B), pin_alarm_button(board.BUTTON_C))
+                alarm.light_sleep_until_alarms(time_alarm_sec(90), pin_alarm_button(board.BUTTON_B), pin_alarm_button(board.BUTTON_C))
             else:
                 scoreboard_retention_time_seconds = 3600
                 alarm.exit_and_deep_sleep_until_alarms(time_alarm_sec(scoreboard_retention_time_seconds), pin_alarm_button(board.BUTTON_B), pin_alarm_button(board.BUTTON_C))
