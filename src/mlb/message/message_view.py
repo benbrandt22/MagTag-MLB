@@ -10,6 +10,8 @@ class MessageView:
         self._message = message
 
     def render(self):
+        print(f'Displaying message: {self._message}')
+
         display = board.DISPLAY
         
         time.sleep(display.time_to_refresh)
