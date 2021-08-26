@@ -10,14 +10,13 @@ from time_utils import day_of_week, month_name_short, relative_day, utc_to_local
 
 class ScheduleView:
 
-    #Display 296 x 128
+    # (Display 296 x 128)
 
     def __init__(self, model: ScheduleViewModel):
         self.model = model
 
     def render(self):
         display = board.DISPLAY
-        print(f'Display: {display.width} x {display.height}')
 
         # wait until we can draw
         time.sleep(display.time_to_refresh)
@@ -115,19 +114,20 @@ class ScheduleView:
                 game_group.append(score)
                 team_y = team_y + 20
 
-        if game.isLive:
-            inning = label.Label(FONTS.OpenSans_12, text=f"{game.inningHalf} {game.currentInningOrdinal}", color=0x000000)
-            inning.anchor_point = (0.5, 0)
-            inning.anchored_position = (49, 105)
-            game_group.append(inning)
+        if game.isLive or game.isFinal:
+            # show status text at the bottom
+            status_text = game.detailedState if game.isStatusExceptional else game.abstractGameState
 
-        if game.isFinal:
-            status_text = game.abstractGameState
-            if game.isExtraInnings:
+            if game.isLive and not game.isStatusExceptional:
+                status_text = f'{game.inningHalf} {game.currentInningOrdinal}'
+
+            if game.isFinal and game.isExtraInnings:
                 status_text = f'{game.abstractGameState} / {game.inningCount}'
+
             status_label = label.Label(FONTS.OpenSans_12, text=status_text, color=0x000000)
             status_label.anchor_point = (0.5, 0)
             status_label.anchored_position = (49, 105)
             game_group.append(status_label)
+        
 
         return game_group

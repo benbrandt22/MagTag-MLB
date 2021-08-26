@@ -10,7 +10,7 @@ from adafruit_display_shapes.rect import Rect
 from adafruit_display_shapes.triangle import Triangle
 from adafruit_display_shapes.circle import Circle
 from adafruit_bitmap_font import bitmap_font
-from time_utils import utc_to_local, month_name, hour_12, ampm, relative_day, day_of_week, local_now
+from time_utils import month_name_short, utc_to_local, month_name, hour_12, ampm, relative_day, day_of_week, local_now
 
 class ScoreboardView:
 
@@ -102,18 +102,18 @@ class ScoreboardView:
             header_time = local_now()
 
         day_text = ( relative_day(header_time) or day_of_week(header_time) )
-        header_text = f'{day_text}, {month_name(header_time)} {header_time.day} / {hour_12(header_time)}:{header_time.minute:02d} {ampm(header_time)}'
+        header_text = f'{day_text}, {month_name_short(header_time)} {header_time.day} / {hour_12(header_time)}:{header_time.minute:02d} {ampm(header_time)}'
 
         time_label = label.Label(FONTS.OpenSans_12, text=header_text, color=0xFFFFFF, background_color=header_bg)
         time_label.anchor_point = (0, 0.5)
         time_label.anchored_position = (3, int(header_height/2))
         header_group.append(time_label)
 
-        if self.model.isLive or self.model.isFinal:
-            status_label = label.Label(FONTS.OpenSans_12, text=self.model.abstractGameState, color=0xFFFFFF, background_color=header_bg)
-            status_label.anchor_point = (1, 0.5)
-            status_label.anchored_position = (293, int(header_height/2))
-            header_group.append(status_label)
+        status_text = self.model.detailedState if self.model.isStatusExceptional else self.model.abstractGameState
+        status_label = label.Label(FONTS.OpenSans_12, text=status_text, color=0xFFFFFF, background_color=header_bg)
+        status_label.anchor_point = (1, 0.5)
+        status_label.anchored_position = (293, int(header_height/2))
+        header_group.append(status_label)
 
         return header_group
 

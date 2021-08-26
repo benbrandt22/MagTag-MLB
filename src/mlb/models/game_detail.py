@@ -86,3 +86,17 @@ class GameDetail:
     def isCancelled(self):
         """Returns true if the game was cancelled"""
         return self.detailedState.startswith('Cancelled')
+
+    @property
+    def isStatusExceptional(self):
+        """Returns true if the game has an out-of-the-ordinary status that should be displayed"""
+        if self.isPreview and self.detailedState == 'Scheduled':
+            return False
+
+        if self.isLive and self.detailedState == 'In Progress':
+            return False
+
+        if self.isFinal and self.detailedState == 'Final':
+            return False
+        
+        return True
