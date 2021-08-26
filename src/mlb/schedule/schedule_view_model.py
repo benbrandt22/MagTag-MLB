@@ -9,8 +9,14 @@ class ScheduleViewModel:
     def has_live_game(self):
         return (self._is_live(self.game1) or self._is_live(self.game2) or self._is_live(self.game3))
 
+    def has_delayed_game(self):
+        return (self._is_delayed(self.game1) or self._is_delayed(self.game2) or self._is_delayed(self.game3))
+
     def _is_live(self, game: GameDetail):
         return ((game is not None) and (game.isLive))
+
+    def _is_delayed(self, game: GameDetail):
+        return ((game is not None) and (game.isDelayed))
 
     def _is_preview(self, game: GameDetail):
         return ((game is not None) and (game.isPreview))

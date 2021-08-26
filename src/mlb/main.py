@@ -94,6 +94,8 @@ def start():
             if(viewModel.has_live_game()):
                 # light sleep for 90 seconds from now to keep score updated during live game.
                 alarm.light_sleep_until_alarms(time_alarm_sec(90), pin_alarm_button(board.BUTTON_B), pin_alarm_button(board.BUTTON_C))
+            if(viewModel.has_delayed_game()):
+                alarm.exit_and_deep_sleep_until_alarms(time_alarm_sec(300), pin_alarm_button(board.BUTTON_B), pin_alarm_button(board.BUTTON_C))
 
             else:
                 # deep sleep until tomorrow morning, or until next game starts.
@@ -136,6 +138,8 @@ def start():
 
             if (model.isLive):
                 alarm.light_sleep_until_alarms(time_alarm_sec(90), pin_alarm_button(board.BUTTON_B), pin_alarm_button(board.BUTTON_C))
+            if (model.isDelayed):
+                alarm.exit_and_deep_sleep_until_alarms(time_alarm_sec(300), pin_alarm_button(board.BUTTON_B), pin_alarm_button(board.BUTTON_C))
             else:
                 scoreboard_retention_time_seconds = 3600
                 alarm.exit_and_deep_sleep_until_alarms(time_alarm_sec(scoreboard_retention_time_seconds), pin_alarm_button(board.BUTTON_B), pin_alarm_button(board.BUTTON_C))
