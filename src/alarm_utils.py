@@ -1,12 +1,15 @@
 import alarm
 import time
 import board
-from digitalio import DigitalInOut, Direction, Pull
+from adafruit_datetime import datetime
 
 # shortcut functions for generating device-wakeup alarms
 
 def time_alarm_sec(seconds: int):
-    return alarm.time.TimeAlarm(epoch_time=(int(time.time()) + seconds))
+    current_timestamp = int(time.time())
+    wakeup_timestamp = current_timestamp + seconds
+    print(f'Setting sleep alarm for {seconds} sec [Current: {datetime.fromtimestamp(current_timestamp)}] [Wakeup: {datetime.fromtimestamp(wakeup_timestamp)}]')
+    return alarm.time.TimeAlarm(epoch_time=wakeup_timestamp)
 
 def all_button_alarms():
     """Returns a set of pin alarms that includes all buttons"""
