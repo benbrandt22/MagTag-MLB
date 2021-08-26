@@ -3,6 +3,7 @@ import time
 import math
 import board
 import displayio
+import json
 import fonts.fonts as FONTS
 from adafruit_display_text import label
 from adafruit_display_shapes.rect import Rect
@@ -21,7 +22,9 @@ class ScoreboardView:
 
     def render(self):
         display = board.DISPLAY
-        
+
+        print('Rendering Scoreboard')
+        print(json.dumps(self.model.__dict__))
         
         # wait until we can draw
         time.sleep(display.time_to_refresh)
