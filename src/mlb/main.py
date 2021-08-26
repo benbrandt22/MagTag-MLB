@@ -137,7 +137,7 @@ def start():
 
             if (model.isLive):
                 alarm.light_sleep_until_alarms(time_alarm_sec(90), pin_alarm_button(board.BUTTON_B), pin_alarm_button(board.BUTTON_C))
-            if (model.isDelayed):
+            elif (model.isDelayed):
                 alarm.exit_and_deep_sleep_until_alarms(time_alarm_sec(300), pin_alarm_button(board.BUTTON_B), pin_alarm_button(board.BUTTON_C))
             else:
                 scoreboard_retention_time_seconds = 3600
