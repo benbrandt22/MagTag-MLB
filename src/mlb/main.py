@@ -35,13 +35,13 @@ def start():
     
     # Start up in Scoreboard mode if there's a live game now
     try:
-        scoreboardGame = API.get_scoreboard_gamePk_and_status(appState.teamId)
-        appState.scoreboardGamePk = scoreboardGame['gamePk']
+        scoreboardGame = API.get_scoreboard_game(appState.teamId)
+        appState.scoreboardGamePk = scoreboardGame.gamePk
     except Exception as ex:
         MessageView(f"Unable to load game data,\nretrying in 1 minute...\n\n({repr(ex)})").render()
         alarm.exit_and_deep_sleep_until_alarms(time_alarm_sec(60))
 
-    if scoreboardGame['status'] == 'Live':
+    if scoreboardGame.abstractGameState == 'Live':
         appState.appMode = AppMode.ScoreBoard
 
 

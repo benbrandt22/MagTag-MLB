@@ -1,4 +1,5 @@
 from adafruit_datetime import datetime, date, timedelta
+from mlb.models.schedule_game import ScheduleGame
 from time_utils import utc_now, parse_iso_time, utc_to_local
 from connect import get_json
 from mlb.models.game_detail import GameDetail, InningDetail
@@ -11,6 +12,7 @@ def _get_item_at_index(list, index):
     if index >= 0 and index < len(list):
         return list[index]
     return None
+
 
 def get_schedule_gamePks(teamId):
     # returns three gamePks for display on the schedule view. Returns an array of 3 gamePks. The second one should always be the current Live, or last Final game
@@ -25,21 +27,21 @@ def get_schedule_gamePks(teamId):
             # only include games that aren't Postponed or Cancelled
             detailedState = g['status']['detailedState']
             if (not detailedState.startswith('Cancelled')) and (not detailedState.startswith('Postponed')):
-                games.append( (g['gamePk'], g['gameDate'], g['status']['abstractGameState']) )
-    games.sort(key=lambda g: g[1]) # sort by date
+                games.append( ScheduleGame( g['gamePk'], g['gameDate'], g['status']['abstractGameState'] ) )
+    games.sort(key=lambda g: g.gameDate) # sort by date
 
     # find last "Final" or "Live" game in list
     last_final_or_live_game_index = -1
     for i in range(len(games)-1, -1, -1):
-        if games[i][2] in ['Final', 'Live']:
+        if games[i].abstractGameState in ['Final', 'Live']:
             last_final_or_live_game_index = i
             break
     
     center_game_index = last_final_or_live_game_index
-    if games[last_final_or_live_game_index][2] == 'Final':
+    if games[last_final_or_live_game_index].abstractGameState == 'Final':
         center_game_index = last_final_or_live_game_index + 1
     
-    # now get this one and the two before and after
+    # now get this game and the ones before and after
     games = [
         _get_item_at_index(games, (center_game_index - 1) ),
         _get_item_at_index(games, (center_game_index) ),
@@ -47,15 +49,16 @@ def get_schedule_gamePks(teamId):
     ]
 
     gamePks = [
-        (games[0][0] if games[0] is not None else None),
-        (games[1][0] if games[1] is not None else None),
-        (games[2][0] if games[2] is not None else None)
+        (games[0].gamePk if games[0] is not None else None),
+        (games[1].gamePk if games[1] is not None else None),
+        (games[2].gamePk if games[2] is not None else None)
     ]
     
     return gamePks
 
-def get_scoreboard_gamePk_and_status(teamId):
-    """If the specified team has a Live game now, returns the gamePk for that game, otherwise None"""
+
+def get_scoreboard_game(teamId):
+    """Returns the default game to display for the scoreboard view. The current Live game or the most recent completed game"""
     start_date = (utc_now() - timedelta(days=7)).date()
     end_date = (utc_now() + timedelta(days=7)).date()
 
@@ -68,15 +71,16 @@ def get_scoreboard_gamePk_and_status(teamId):
             # only include games that aren't Postponed or Cancelled
             detailedState = g['status']['detailedState']
             if (not detailedState.startswith('Cancelled')) and (not detailedState.startswith('Postponed')):
-                games.append( (g['gamePk'], g['gameDate'], g['status']['abstractGameState']) )
-    games.sort(key=lambda g: g[1]) # sort by date
+                games.append( ScheduleGame( g['gamePk'], g['gameDate'], g['status']['abstractGameState'] ) )
+    games.sort(key=lambda g: g.gameDate) # sort by date
 
     # find last Final/Live game
     for i in range(len(games)-1, -1, -1):
-        if games[i][2] in ['Final', 'Live']:
-            return { 'gamePk' : games[i][0], 'status' : games[i][2] } 
+        if games[i].abstractGameState in ['Final', 'Live']:
+            return games[i]
     
     return None
+
 
 def get_game_detailed_info(gamePk):
     model = GameDetail()
