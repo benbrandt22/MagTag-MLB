@@ -32,7 +32,3 @@ def was_woken_by_time():
 def was_woken_by_powerup():
     """Returns true if the device was turned on, and not woken by any alarm"""
     return ( alarm.wake_alarm is None )
-
-def clear_wake_alarm():
-    """Clears out the reason why the device was last woken"""
-    alarm.wake_alarm = None
