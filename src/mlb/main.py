@@ -8,7 +8,7 @@ from mlb.schedule.schedule_view import ScheduleView
 from mlb.scoreboard.scoreboard_view import ScoreboardView
 import mlb.api as API
 import alarm
-from alarm_utils import pin_alarm_button, time_alarm_sec, was_woken_by_pin, was_woken_by_time, was_woken_by_powerup
+from alarm_utils import pin_alarm_button, time_alarm_sec, was_woken_by_pin, was_woken_by_time, clear_wake_alarm
 from time_utils import local_now, utc_to_local, utc_now
 from mlb.models.app_state import AppState
 from mlb.message.message_view import MessageView
@@ -51,6 +51,7 @@ def start():
         # if the device just woke up from a button, process the button press here    
         if( was_woken_by_pin(board.BUTTON_B) or was_woken_by_pin(board.BUTTON_C) ):
             # B or C pressed, switch to the opposite of the previous mode
+            clear_wake_alarm()
             previous_mode = alarm.sleep_memory[0]
             if(previous_mode == AppMode.Schedule):
                 appState.appMode = AppMode.ScoreBoard
