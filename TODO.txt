@@ -5,6 +5,7 @@ This file serves as a place to collect various changes/fixes/improvements I want
 - Analyze past MLB games to see how often games go into extra innings, and typically how many innings. Work on better scoreboard display logic for high-inning games.
 
 - Indicate battery level somehow. Red light when low? Icon on screen?
+    - figure out at what voltage the device typically shuts down, and display a notice on-screen when battery is near-low
 
 - (maybe) play sound for runs? (Circuitpython on this board currently can only support playing simple tones, not wav files)
 
